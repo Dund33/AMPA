@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="maximal_mass_metric">100</integer>
+    <integer name="maximal_mass_imperial">200</integer>
+    <integer name="maximal_height_metric">100</integer>
+    <integer name="maximal_height_imperial">50</integer>
+    <integer name="base_mass_metric">50</integer>
+    <integer name="base_mass_imperial">100</integer>
+    <integer name="base_height_metric">100</integer>
+    <integer name="base_height_imperial">50</integer>
+</resources>

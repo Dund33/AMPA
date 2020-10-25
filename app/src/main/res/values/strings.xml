@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">BmiMaster</string>
+    <string name="mass_metric">Mass in kilograms</string>
+    <string name="height_metric">Height in centimeters</string>
+    <string name="mass_imperial">Mass in pounds</string>
+    <string name="height_imperial">Height in inches</string>
+    <string name="height_is_empty">Het hoeg is empty</string>
+    <string name="count_bmi">bmi</string>
+    <string name="change_system">Change mesaure system</string>
+    <string name="empty_value"></string>
+</resources>
