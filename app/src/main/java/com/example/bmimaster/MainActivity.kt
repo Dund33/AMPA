@@ -20,7 +20,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         val massSeekBar = binding.massSeekBar
         val heightSeekBar = binding.heightSeekBar
-        val massTV = binding.massTV
 
         val listener = object: SeekBar.OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
