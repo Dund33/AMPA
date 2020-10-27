@@ -10,6 +10,7 @@
     <string name="empty_value"></string>
     <string name="your_bmi_is">Your BMI is</string>
     <string name="title_activity_details">Details</string>
+    <string name="bmi_scale">BMI scale</string>
     <!--
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.
