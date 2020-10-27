@@ -1,13 +1,15 @@
 package com.example.bmimaster
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
 import android.widget.SeekBar
+import androidx.appcompat.app.AppCompatActivity
 import com.example.bmimaster.databinding.ActivityMainBinding
-import java.lang.Exception
-import java.lang.Integer.getInteger
-import kotlin.math.pow
+
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
@@ -20,13 +22,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         val massSeekBar = binding.massSeekBar
         val heightSeekBar = binding.heightSeekBar
+        val bmiTV = binding.bmiEditTextNumber
+        bmiTV.setOnLongClickListener { openDetails(it) }
 
         val listener = object: SeekBar.OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
 
             override fun  onStartTrackingTouch(seekBar: SeekBar) {}
 
-            override fun onProgressChanged(seekBar: SeekBar, progress :Int, fromUser: Boolean)
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean)
                 {updateUI()}
         }
 
@@ -52,6 +56,15 @@ class MainActivity : AppCompatActivity() {
         outState.putInt("weight", weight)
         outState.putInt("height", height)
         //TODO oprogramowac zapamietywanie stanu ui (tam gdzie potrzeba)
+    }
+
+    fun openDetails(view: View): Boolean{
+        val bmiEditTextNumber = binding.bmiEditTextNumber
+        val intent = Intent(this, Details::class.java )
+        intent.putExtra("bmi", bmiEditTextNumber.text)
+        startActivityForResult(intent, 0) // Activity is started with requestCode
+
+        return true
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
