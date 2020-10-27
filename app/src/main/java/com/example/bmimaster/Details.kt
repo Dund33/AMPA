@@ -15,13 +15,12 @@ class Details : AppCompatActivity() {
         val bmiTV = findViewById<TextView>(R.id.bmiTV)
         val bmiDescriptionTV = findViewById<TextView>(R.id.descriptionTV)
 
-        val bmi = intent.getStringExtra("bmi")
-        val bmiDouble = bmi?.toDouble() ?: 0.0
+        val bmi = intent.getDoubleExtra("bmi", 0.0)
 
-        val bmiDescription = BMI.getBMIDescription(bmiDouble)
+        val bmiDescription = BMI.getBMIDescription(bmi)
         bmiDescriptionTV.text = bmiDescription
 
-        bmiTV.text = bmi
+        bmiTV.text = bmi.toString()
     }
 
 }

@@ -61,7 +61,10 @@ class MainActivity : AppCompatActivity() {
     fun openDetails(view: View): Boolean{
         val bmiEditTextNumber = binding.bmiEditTextNumber
         val intent = Intent(this, Details::class.java )
-        intent.putExtra("bmi", bmiEditTextNumber.text.toString())
+        intent.putExtra("bmi", bmiEditTextNumber
+            .text
+            .toString()
+            .toDouble())
         startActivityForResult(intent, 0) // Activity is started with requestCode
 
         return true
