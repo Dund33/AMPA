@@ -55,7 +55,6 @@ class MainActivity : AppCompatActivity() {
         outState.putString("system", measureSystem.toString())
         outState.putInt("weight", weight)
         outState.putInt("height", height)
-        //TODO oprogramowac zapamietywanie stanu ui (tam gdzie potrzeba)
     }
 
     fun openDetails(view: View): Boolean{
