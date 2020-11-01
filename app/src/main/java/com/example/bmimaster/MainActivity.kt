@@ -35,10 +35,12 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val saveButton = binding.button
         val massSeekBar = binding.massSeekBar
         val heightSeekBar = binding.heightSeekBar
         val bmiTV = binding.bmiEditTextNumber
-        bmiTV.setOnLongClickListener { openDetails(it) }
+        bmiTV.setOnLongClickListener { openDetails() }
+        saveButton.setOnLongClickListener { openSaved() }
 
         val listener = object : SeekBar.OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
@@ -71,7 +73,7 @@ class MainActivity : AppCompatActivity() {
         outState.putInt("height", height)
     }
 
-    private fun openDetails(view: View): Boolean {
+    private fun openDetails(): Boolean {
         val bmiEditTextNumber = binding.bmiEditTextNumber
         val intent = Intent(this, Details::class.java)
         intent.putExtra(
@@ -85,10 +87,16 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
+    private fun openSaved(): Boolean {
+        val intent = Intent(this, BMIList::class.java)
+        startActivityForResult(intent, 0) // Act
+        return true
+    }
+
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         val systemString = savedInstanceState.getString("system")
-        measureSystem = when(systemString){
+        measureSystem = when (systemString) {
             MeasureSystem.Metric.toString() -> MeasureSystem.Metric
             MeasureSystem.Imperial.toString() -> MeasureSystem.Imperial
             else -> throw Exception("cannot restore :<")
@@ -101,6 +109,7 @@ class MainActivity : AppCompatActivity() {
         //TODO odt. stanu
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun swapSystem(caller: MenuItem) {
         measureSystem = when (measureSystem) {
             MeasureSystem.Imperial -> MeasureSystem.Metric
@@ -180,8 +189,9 @@ class MainActivity : AppCompatActivity() {
         bmiEditTextNumber.setText(bmi.toString())
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun saveBMI(caller: View) {
-        val (bmi, color) = getBMI()
+        val (bmi, _) = getBMI()
         if (savedBMIs < recordLength) {
             sharedPreferences.edit()
                 .putFloat(savedBMIs.toString(), bmi.toFloat())
