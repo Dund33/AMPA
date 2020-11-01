@@ -1,14 +1,17 @@
 package com.example.bmimaster
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.SeekBar
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.bmimaster.databinding.ActivityMainBinding
+import kotlin.properties.Delegates
 
 
 class MainActivity : AppCompatActivity() {
@@ -16,8 +19,20 @@ class MainActivity : AppCompatActivity() {
 
     private var measureSystem: MeasureSystem = MeasureSystem.Metric
 
+    private lateinit var sharedPreferences: SharedPreferences
+
+    private var savedBMIs by Delegates.notNull<Int>()
+
+    private val recordLength = 10
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        sharedPreferences = applicationContext
+            .getSharedPreferences("measurements", MODE_PRIVATE)
+
+        savedBMIs = sharedPreferences.getInt("measurement_count", 0)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val massSeekBar = binding.massSeekBar
@@ -25,13 +40,14 @@ class MainActivity : AppCompatActivity() {
         val bmiTV = binding.bmiEditTextNumber
         bmiTV.setOnLongClickListener { openDetails(it) }
 
-        val listener = object: SeekBar.OnSeekBarChangeListener {
+        val listener = object : SeekBar.OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
 
-            override fun  onStartTrackingTouch(seekBar: SeekBar) {}
+            override fun onStartTrackingTouch(seekBar: SeekBar) {}
 
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean)
-                {updateUI()}
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                updateUI()
+            }
         }
 
         massSeekBar.setOnSeekBarChangeListener(listener)
@@ -40,13 +56,11 @@ class MainActivity : AppCompatActivity() {
         updateUI()
     }
 
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.select_system, menu)
         return true
     }
-
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -57,13 +71,15 @@ class MainActivity : AppCompatActivity() {
         outState.putInt("height", height)
     }
 
-    fun openDetails(view: View): Boolean{
+    private fun openDetails(view: View): Boolean {
         val bmiEditTextNumber = binding.bmiEditTextNumber
-        val intent = Intent(this, Details::class.java )
-        intent.putExtra("bmi", bmiEditTextNumber
-            .text
-            .toString()
-            .toDouble())
+        val intent = Intent(this, Details::class.java)
+        intent.putExtra(
+            "bmi", bmiEditTextNumber
+                .text
+                .toString()
+                .toDouble()
+        )
         startActivityForResult(intent, 0) // Activity is started with requestCode
 
         return true
@@ -85,22 +101,22 @@ class MainActivity : AppCompatActivity() {
         //TODO odt. stanu
     }
 
-    fun swapSystem(caller: MenuItem){
-        measureSystem = when(measureSystem){
+    fun swapSystem(caller: MenuItem) {
+        measureSystem = when (measureSystem) {
             MeasureSystem.Imperial -> MeasureSystem.Metric
             MeasureSystem.Metric -> MeasureSystem.Imperial
         }
         setup()
     }
 
-    fun setup(){
-        if(measureSystem == MeasureSystem.Imperial)
+    private fun setup() {
+        if (measureSystem == MeasureSystem.Imperial)
             setupImperial()
         else
             setupMetric()
     }
 
-    fun setupMetric(){
+    private fun setupMetric() {
         val massTV = binding.massTV
         val heightTV = binding.heightTV
         val massSeekBar = binding.massSeekBar
@@ -115,7 +131,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun setupImperial(){
+    private fun setupImperial() {
         val massSeekBar = binding.massSeekBar
         val heightSeekBar = binding.heightSeekBar
         val massTV = binding.massTV
@@ -130,18 +146,18 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun updateUI(){
+    private fun getBMI(): Pair<Double, Int> {
         val massSeekBar = binding.massSeekBar
         val heightSeekBar = binding.heightSeekBar
 
-        val mass = when(measureSystem){
+        val mass = when (measureSystem) {
             MeasureSystem.Metric ->
                 massSeekBar.progress + resources.getInteger(R.integer.base_mass_metric)
             MeasureSystem.Imperial ->
                 massSeekBar.progress + resources.getInteger(R.integer.base_mass_imperial)
         }.toDouble()
 
-        val height = when(measureSystem){
+        val height = when (measureSystem) {
             MeasureSystem.Metric ->
                 heightSeekBar.progress + resources.getInteger(R.integer.base_height_metric)
             MeasureSystem.Imperial ->
@@ -153,10 +169,36 @@ class MainActivity : AppCompatActivity() {
         val heightEditTextNumber = binding.heightEditTextNumber
         massEditTextNumber.setText(mass.toString())
         heightEditTextNumber.setText(height.toString())
-        val bmiEditTextNumber = binding.bmiEditTextNumber
 
-        val (bmi, color) = BMI.getBMI(height, mass, measureSystem)
+        return BMI.getBMI(height, mass, measureSystem)
+    }
+
+    fun updateUI() {
+        val (bmi, color) = getBMI()
+        val bmiEditTextNumber = binding.bmiEditTextNumber
         bmiEditTextNumber.setTextColor(color)
         bmiEditTextNumber.setText(bmi.toString())
+    }
+
+    fun saveBMI(caller: View) {
+        val (bmi, color) = getBMI()
+        if (savedBMIs < recordLength) {
+            sharedPreferences.edit()
+                .putFloat(savedBMIs.toString(), bmi.toFloat())
+                .apply()
+            savedBMIs++
+        } else {
+            for (i in 1..recordLength) {
+                val nextBMI = sharedPreferences.getFloat(i.toString(), -1.0f)
+                sharedPreferences.edit()
+                    .putFloat((i - 1).toString(), nextBMI)
+                    .apply()
+            }
+            sharedPreferences.edit()
+                .putFloat((recordLength - 1).toString(), bmi.toFloat())
+                .apply()
+        }
+        val recorded = sharedPreferences.getFloat((recordLength - 1).toString(), -1.0f)
+        Toast.makeText(applicationContext, recorded.toString(), Toast.LENGTH_LONG).show()
     }
 }
