@@ -52,7 +52,7 @@ class BMIRepo private constructor(
     }
 
     companion object{
-        var instance : BMIRepo? = null
+        private var instance : BMIRepo? = null
 
         fun getInstance(context:Context): BMIRepo{
             if(instance == null){
