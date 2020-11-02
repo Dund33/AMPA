@@ -3,7 +3,7 @@ package com.example.bmimaster
 import android.content.Context
 import java.util.*
 
-class BMIRepo(
+class BMIRepo private constructor(
     fileName: String,
     context: Context,
     val recordLength: Int
@@ -49,5 +49,16 @@ class BMIRepo(
             list.add(bmi)
         }
         return list.toTypedArray()[index]
+    }
+
+    companion object{
+        var instance : BMIRepo? = null
+
+        fun getInstance(context:Context): BMIRepo{
+            if(instance == null){
+                instance = BMIRepo("data", context, 10)
+            }
+            return instance as BMIRepo
+        }
     }
 }

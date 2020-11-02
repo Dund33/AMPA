@@ -192,23 +192,7 @@ class MainActivity : AppCompatActivity() {
     @Suppress("UNUSED_PARAMETER")
     fun saveBMI(caller: View) {
         val (bmi, _) = getBMI()
-        if (savedBMIs < recordLength) {
-            sharedPreferences.edit()
-                .putFloat(savedBMIs.toString(), bmi.toFloat())
-                .apply()
-            savedBMIs++
-        } else {
-            for (i in 1..recordLength) {
-                val nextBMI = sharedPreferences.getFloat(i.toString(), -1.0f)
-                sharedPreferences.edit()
-                    .putFloat((i - 1).toString(), nextBMI)
-                    .apply()
-            }
-            sharedPreferences.edit()
-                .putFloat((recordLength - 1).toString(), bmi.toFloat())
-                .apply()
-        }
-        val recorded = sharedPreferences.getFloat((recordLength - 1).toString(), -1.0f)
-        Toast.makeText(applicationContext, recorded.toString(), Toast.LENGTH_LONG).show()
+        val repo = BMIRepo.getInstance(applicationContext)
+        repo.addBMI(bmi.toFloat())
     }
 }
