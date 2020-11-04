@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class BMIAdapter(private val repo: BMIRepo) : RecyclerView.Adapter<BMIAdapter.BMIViewHolder>() {
+class BMIAdapter() : RecyclerView.Adapter<BMIAdapter.BMIViewHolder>() {
     class BMIViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val bmiInfoTextView: TextView = itemView.findViewById(R.id.bmiinfoTextView)
     }
@@ -18,10 +18,10 @@ class BMIAdapter(private val repo: BMIRepo) : RecyclerView.Adapter<BMIAdapter.BM
     }
 
     override fun onBindViewHolder(holder: BMIViewHolder, position: Int) {
-        holder.bmiInfoTextView.text = repo[position].toString()
+        holder.bmiInfoTextView.text = BMIRepo[position].toString()
     }
 
     override fun getItemCount(): Int {
-        return repo.recordLength
+        return BMIRepo.getNumberOfStoredBMIs()
     }
 }

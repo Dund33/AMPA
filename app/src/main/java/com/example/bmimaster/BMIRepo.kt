@@ -1,64 +1,48 @@
 package com.example.bmimaster
 
 import android.content.Context
+import android.content.SharedPreferences
+import com.google.gson.Gson
 import java.util.*
+import kotlin.collections.ArrayList
 
-class BMIRepo private constructor(
-    fileName: String,
-    context: Context,
-    val recordLength: Int
-) {
-    private val sharedPreferences =
-        context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
-    private var storedBMIs =
-        sharedPreferences.getInt("stored_bmis", 0)
+object BMIRepo{
+    private lateinit var sharedPreferences : SharedPreferences
+    private var recordLength: Int = 0
 
+
+    fun init(context: Context, fileName: String, size: Int){
+        sharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
+        recordLength = size
+    }
 
     fun addBMI(bmi: Float) {
-        if (storedBMIs < recordLength) {
-            sharedPreferences.edit()
-                .putFloat(storedBMIs.toString(), bmi)
-                .apply()
-            storedBMIs++
-        } else {
-            for (i in 1..recordLength) {
-                val nextBMI = sharedPreferences.getFloat(i.toString(), -1.0f)
-                sharedPreferences.edit()
-                    .putFloat((i - 1).toString(), nextBMI)
-                    .apply()
-            }
-            sharedPreferences.edit()
-                .putFloat((recordLength - 1).toString(), bmi)
-                .apply()
-        }
+        val listJSON = sharedPreferences.getString("saves", "[]")
+        val list = Gson().fromJson<ArrayList<Float>>(listJSON, java.util.ArrayList::class.java)
+        list.add(bmi)
+
+        if(list.count() > recordLength)
+            list.removeAt(0)
+
+        val newListJSON = Gson().toJson(list)
+        sharedPreferences.edit().putString("saves", newListJSON).apply()
     }
 
     fun getBMIs(): Array<Float> {
-        val list = LinkedList<Float>()
-        for (i in 0..10) {
-            val bmi = sharedPreferences.getFloat(i.toString(), 0f)
-            list.add(bmi)
-        }
+        val listJSON = sharedPreferences.getString("saves", "")
+        val list = Gson().fromJson<ArrayList<Float>>(listJSON, java.util.ArrayList::class.java)
         return list.toTypedArray()
     }
 
-    operator fun get(index: Int): Float {
-        val list = LinkedList<Float>()
-        for (i in 0..10) {
-            val bmi = sharedPreferences.getFloat(i.toString(), 0f)
-            list.add(bmi)
-        }
-        return list.toTypedArray()[index]
+    fun getNumberOfStoredBMIs(): Int{
+        val listJSON = sharedPreferences.getString("saves", "")
+        val list = Gson().fromJson<ArrayList<Float>>(listJSON, java.util.ArrayList::class.java)
+        return list.count()
     }
 
-    companion object{
-        private var instance : BMIRepo? = null
-
-        fun getInstance(context:Context): BMIRepo{
-            if(instance == null){
-                instance = BMIRepo("data", context, 10)
-            }
-            return instance as BMIRepo
-        }
+    operator fun get(index: Int): Float {
+        val listJSON = sharedPreferences.getString("saves", "")
+        val list = Gson().fromJson<ArrayList<Float>>(listJSON, java.util.ArrayList::class.java)
+        return list[index]
     }
 }

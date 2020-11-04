@@ -28,6 +28,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        BMIRepo.init(applicationContext, "data", recordLength)
+
         sharedPreferences = applicationContext
             .getSharedPreferences("measurements", MODE_PRIVATE)
 
@@ -192,7 +194,6 @@ class MainActivity : AppCompatActivity() {
     @Suppress("UNUSED_PARAMETER")
     fun saveBMI(caller: View) {
         val (bmi, _) = getBMI()
-        val repo = BMIRepo.getInstance(applicationContext)
-        repo.addBMI(bmi.toFloat())
+        BMIRepo.addBMI(bmi.toFloat())
     }
 }

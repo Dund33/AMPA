@@ -10,8 +10,7 @@ class BMIList : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_b_m_i_list)
         val rv = findViewById<RecyclerView>(R.id.rvBMI)
-        val bmiRepo = BMIRepo.getInstance(applicationContext)
-        val adapter = BMIAdapter(bmiRepo)
+        val adapter = BMIAdapter()
         rv.adapter = adapter
         rv.layoutManager = LinearLayoutManager(this)
     }
