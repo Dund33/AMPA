@@ -1,6 +1,7 @@
 package com.example.bmimaster
 
 import android.graphics.Canvas
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.TextureView
 import android.view.View
