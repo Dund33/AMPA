@@ -10,7 +10,13 @@ import android.view.View
 class LiterallyACircle(context: Context, attributeSet: AttributeSet) : View(context, attributeSet) {
 
     private val paint = Paint()
-    var color: Int = Color.RED
+    private var _color: Int = Color.RED
+    var color: Int
+        get() = this._color
+        set(value) {
+            this._color = value
+            paint.color = value
+        }
 
     init{
         paint.color = color
