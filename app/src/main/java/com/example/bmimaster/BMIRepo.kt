@@ -3,7 +3,6 @@ package com.example.bmimaster
 import android.content.Context
 import android.content.SharedPreferences
 import com.google.gson.Gson
-import java.util.*
 import kotlin.collections.ArrayList
 
 object BMIRepo{
@@ -17,32 +16,32 @@ object BMIRepo{
     }
 
     fun addBMI(bmi: Float) {
-        val listJSON = sharedPreferences.getString("saves", "[]")
-        val list = Gson().fromJson<ArrayList<Float>>(listJSON, java.util.ArrayList::class.java)
-        list.add(bmi)
+        val list = getBMIs()
+        val color = BMI.getColor(bmi)
+        list.add(BMIRecord(bmi, color))
 
         if(list.count() > recordLength)
             list.removeAt(0)
 
-        val newListJSON = Gson().toJson(list)
+        val array = list.toTypedArray()
+        val newListJSON = Gson().toJson(array)
         sharedPreferences.edit().putString("saves", newListJSON).apply()
     }
 
-    fun getBMIs(): Array<Float> {
-        val listJSON = sharedPreferences.getString("saves", "")
-        val list = Gson().fromJson<ArrayList<Float>>(listJSON, java.util.ArrayList::class.java)
-        return list.toTypedArray()
+    private fun getBMIs(): ArrayList<BMIRecord> {
+        val listJSON = sharedPreferences.getString("saves", "[]")
+        val list =  Gson().fromJson(listJSON, Array<BMIRecord>::class.java)
+        val arrayList = ArrayList<BMIRecord>()
+        arrayList.addAll(list)
+        return arrayList
     }
 
     fun getNumberOfStoredBMIs(): Int{
-        val listJSON = sharedPreferences.getString("saves", "")
-        val list = Gson().fromJson<ArrayList<Float>>(listJSON, java.util.ArrayList::class.java)
-        return list.count()
+        return getBMIs().count()
     }
 
-    operator fun get(index: Int): Float {
-        val listJSON = sharedPreferences.getString("saves", "")
-        val list = Gson().fromJson<ArrayList<Float>>(listJSON, java.util.ArrayList::class.java)
+    operator fun get(index: Int): BMIRecord {
+        val list = getBMIs()
         return list[index]
     }
 }

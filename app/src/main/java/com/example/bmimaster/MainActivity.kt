@@ -157,7 +157,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun getBMI(): Pair<Double, Int> {
+    private fun getBMI(): Pair<Float, Int> {
         val massSeekBar = binding.massSeekBar
         val heightSeekBar = binding.heightSeekBar
 
@@ -166,14 +166,14 @@ class MainActivity : AppCompatActivity() {
                 massSeekBar.progress + resources.getInteger(R.integer.base_mass_metric)
             MeasureSystem.Imperial ->
                 massSeekBar.progress + resources.getInteger(R.integer.base_mass_imperial)
-        }.toDouble()
+        }.toFloat()
 
         val height = when (measureSystem) {
             MeasureSystem.Metric ->
                 heightSeekBar.progress + resources.getInteger(R.integer.base_height_metric)
             MeasureSystem.Imperial ->
                 heightSeekBar.progress + resources.getInteger(R.integer.base_height_imperial)
-        }.toDouble()
+        }.toFloat()
 
         //Update labels
         val massEditTextNumber = binding.massEditTextNumber
@@ -194,6 +194,6 @@ class MainActivity : AppCompatActivity() {
     @Suppress("UNUSED_PARAMETER")
     fun saveBMI(caller: View) {
         val (bmi, _) = getBMI()
-        BMIRepo.addBMI(bmi.toFloat())
+        BMIRepo.addBMI(bmi)
     }
 }
