@@ -8,7 +8,7 @@ import kotlin.collections.ArrayList
 object BMIRepo{
     private lateinit var sharedPreferences : SharedPreferences
     private var recordLength: Int = 0
-
+    var repoFile = "saves"
 
     fun init(context: Context, fileName: String, size: Int){
         sharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
@@ -25,11 +25,17 @@ object BMIRepo{
 
         val array = list.toTypedArray()
         val newListJSON = Gson().toJson(array)
-        sharedPreferences.edit().putString("saves", newListJSON).apply()
+        sharedPreferences.edit().putString(repoFile, newListJSON).apply()
+    }
+
+    fun clear(){
+        sharedPreferences.edit()
+            .putString(repoFile, "[]")
+            .apply()
     }
 
     private fun getBMIs(): ArrayList<BMIRecord> {
-        val listJSON = sharedPreferences.getString("saves", "[]")
+        val listJSON = sharedPreferences.getString(repoFile, "[]")
         val list =  Gson().fromJson(listJSON, Array<BMIRecord>::class.java)
         val arrayList = ArrayList<BMIRecord>()
         arrayList.addAll(list)
