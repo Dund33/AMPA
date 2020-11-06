@@ -28,10 +28,11 @@ object BMIRepo{
         sharedPreferences.edit().putString(repoFile, newListJSON).apply()
     }
 
-    fun clear(){
-        sharedPreferences.edit()
-            .putString(repoFile, "[]")
-            .apply()
+    fun removeFile(){
+        sharedPreferences
+                .edit()
+                .remove(repoFile)
+                .apply()
     }
 
     private fun getBMIs(): ArrayList<BMIRecord> {
