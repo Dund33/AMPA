@@ -11,7 +11,8 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class RepoTest {
 
-    val repoSize = 10
+    private val repoSize = 10
+    private val overflowSize = 1000
     @Before
     fun initRepo(){
         //Arrange
@@ -45,7 +46,7 @@ class RepoTest {
     @Test
     fun testRepoOverflowNumber(){
         //Act
-        for(i in 0..1000){
+        for(i in 1..overflowSize){
             BMIRepo.addBMI(i.toFloat())
         }
         //Assert
@@ -55,7 +56,7 @@ class RepoTest {
     @Test
     fun testRepoOverflowNoException(){
         //Act/Assert
-        for(i in 0..1000){
+        for(i in 1..overflowSize){
             BMIRepo.addBMI(i.toFloat())
         }
     }
