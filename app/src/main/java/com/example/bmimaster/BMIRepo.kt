@@ -3,6 +3,7 @@ package com.example.bmimaster
 import android.content.Context
 import android.content.SharedPreferences
 import com.google.gson.Gson
+import java.util.*
 import kotlin.collections.ArrayList
 
 object BMIRepo{
@@ -18,10 +19,10 @@ object BMIRepo{
     fun addBMI(bmi: Float) {
         val list = getBMIs()
         val color = BMI.getColor(bmi)
-        list.add(BMIRecord(bmi, color))
+        list.addFirst(BMIRecord(bmi, color))
 
         if(list.count() > recordLength)
-            list.removeAt(0)
+            list.removeLast()
 
         val array = list.toTypedArray()
         val newListJSON = Gson().toJson(array)
@@ -35,12 +36,12 @@ object BMIRepo{
                 .apply()
     }
 
-    private fun getBMIs(): ArrayList<BMIRecord> {
+    private fun getBMIs(): LinkedList<BMIRecord> {
         val listJSON = sharedPreferences.getString(repoFile, "[]")
         val list =  Gson().fromJson(listJSON, Array<BMIRecord>::class.java)
-        val arrayList = ArrayList<BMIRecord>()
-        arrayList.addAll(list)
-        return arrayList
+        val linkedList = LinkedList<BMIRecord>()
+        linkedList.addAll(list)
+        return linkedList
     }
 
     fun getNumberOfStoredBMIs(): Int{
