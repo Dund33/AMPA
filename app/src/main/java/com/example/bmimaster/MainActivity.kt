@@ -8,7 +8,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.SeekBar
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.bmimaster.databinding.ActivityMainBinding
 import kotlin.properties.Delegates
@@ -28,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        BMI.initContext(applicationContext)
         BMIRepo.init(applicationContext, "data", recordLength)
 
         sharedPreferences = applicationContext
@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun openDetails(): Boolean {
         val bmiEditTextNumber = binding.bmiEditTextNumber
-        val intent = Intent(this, Details::class.java)
+        val intent = Intent(this, DetailsActivity::class.java)
         intent.putExtra(
             "bmi", bmiEditTextNumber
                 .text
@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openSaved(): Boolean {
-        val intent = Intent(this, BMIList::class.java)
+        val intent = Intent(this, BMIListActivity::class.java)
         startActivityForResult(intent, 0) // Act
         return true
     }
