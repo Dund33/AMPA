@@ -14,6 +14,7 @@ object BMIRepo{
     fun init(context: Context, fileName: String, size: Int){
         sharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
         recordLength = size
+        repoFile = fileName
     }
 
     fun addBMI(bmi: Float) {
