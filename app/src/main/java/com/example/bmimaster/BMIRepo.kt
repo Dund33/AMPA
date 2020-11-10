@@ -17,10 +17,10 @@ object BMIRepo{
         repoFile = fileName
     }
 
-    fun addBMI(bmi: Float) {
+    fun addBMI(bmi: Float, measureSystem: MeasureSystem, date: Date) {
         val list = getBMIs()
         val color = BMI.getColor(bmi)
-        list.addFirst(BMIRecord(bmi, color))
+        list.addFirst(BMIRecord(bmi, color, measureSystem, date))
 
         if(list.count() > recordLength)
             list.removeLast()

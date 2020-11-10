@@ -1,3 +1,5 @@
 package com.example.bmimaster
 
-class BMIRecord (val bmi: Float, val color: Int)
+import java.util.*
+
+class BMIRecord (val bmi: Float, val color: Int, val measureSystem: MeasureSystem, val date: Date)
