@@ -16,11 +16,11 @@ object BMI {
 
     fun getBMIDescription(bmi: Double): String? {
         return when (bmi) {
-            in 12.0..19.0 -> context?.getString(R.string.u_r_overweight)
+            in 12.0..19.0 -> context?.getString(R.string.u_r_underweight)
             in 19.0..24.0 -> context?.getString(R.string.u_r_ok)
             in 24.0..29.0 -> context?.getString(R.string.u_r_overweight)
             in 29.0..43.0 -> context?.getString(R.string.u_r_obese)
-            else -> context?.getString(R.string.allah_have_mercy)
+            else -> context?.getString(R.string.get_some_help)
         }
     }
 

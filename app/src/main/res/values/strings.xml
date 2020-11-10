@@ -17,7 +17,7 @@
     <string name="u_r_ok">Your weight is OK :)</string>
     <string name="u_r_underweight">You are underweight, eat a burger from time to time</string>
     <string name="u_r_obese">You are obese</string>
-    <string name="allah_have_mercy">Allah have mercy</string>
+    <string name="get_some_help">Go get some help</string>
     <!--
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.
