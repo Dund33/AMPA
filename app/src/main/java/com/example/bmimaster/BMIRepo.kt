@@ -6,7 +6,7 @@ import com.google.gson.Gson
 import java.util.*
 import kotlin.collections.ArrayList
 
-object BMIRepo{
+object BMIRepoa{
     private lateinit var sharedPreferences : SharedPreferences
     private var recordLength: Int = 0
     var repoFile = "saves"
@@ -20,7 +20,7 @@ object BMIRepo{
     fun addBMI(bmi: Float, measureSystem: MeasureSystem, date: Date) {
         val list = getBMIs()
         val color = BMI.getColor(bmi)
-        list.addFirst(BMIRecord(bmi, color, measureSystem, date))
+        list.addFirst(BMIRecord(0, bmi, color, measureSystem, date))
 
         if(list.count() > recordLength)
             list.removeLast()

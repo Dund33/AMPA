@@ -25,7 +25,7 @@ class BMIAdapter() : RecyclerView.Adapter<BMIAdapter.BMIViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: BMIViewHolder, position: Int) {
-        val bmiRecord = BMIRepo[position]
+        val bmiRecord = BMIRepoRoom[position]
         holder.bmiInfoTextView.text = bmiRecord.bmi.toString()
         holder.square.color = bmiRecord.color
         holder.unitsTV.text = when(bmiRecord.measureSystem){
@@ -36,6 +36,6 @@ class BMIAdapter() : RecyclerView.Adapter<BMIAdapter.BMIViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        return BMIRepo.getNumberOfStoredBMIs()
+        return BMIRepoRoom.getNumberOfStoredBMIs()
     }
 }

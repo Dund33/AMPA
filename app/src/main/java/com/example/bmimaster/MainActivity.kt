@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.room.Room
 import com.example.bmimaster.databinding.ActivityMainBinding
 import java.util.*
 import kotlin.properties.Delegates
@@ -29,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         BMI.initContext(applicationContext)
-        BMIRepo.init(applicationContext, "data", recordLength)
+        BMIRepoRoom.init(applicationContext)
         sharedPreferences = applicationContext
             .getSharedPreferences("measurements", MODE_PRIVATE)
 
@@ -194,6 +195,6 @@ class MainActivity : AppCompatActivity() {
     @Suppress("UNUSED_PARAMETER")
     fun saveBMI(caller: View) {
         val (bmi, _) = getBMI()
-        BMIRepo.addBMI(bmi, measureSystem, Calendar.getInstance().time)
+        BMIRepoRoom.addBMI(bmi, measureSystem, Calendar.getInstance().time)
     }
 }
